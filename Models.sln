@@ -1,13 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{9E0F72FD-29FF-4CB1-A4DB-1FE373209775}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C6C2BF01-A79F-46DF-B4C8-33011E510BEE} = {C6C2BF01-A79F-46DF-B4C8-33011E510BEE}
 		{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB} = {BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}
 		{A46FC12E-AC99-4A63-B826-716F1252061E} = {A46FC12E-AC99-4A63-B826-716F1252061E}
+		{48D234CD-9F04-4D8B-A6CD-3513ABAE255A} = {48D234CD-9F04-4D8B-A6CD-3513ABAE255A}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodSearch.Models.Common", "BloodSearch.Models.Common\BloodSearch.Models.Common.csproj", "{C6C2BF01-A79F-46DF-B4C8-33011E510BEE}"
@@ -16,8 +17,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodSearch.Models.Common",
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodSearch.Models.Api", "..\Common\BloodSearch.Models.Api\BloodSearch.Models.Api.csproj", "{A46FC12E-AC99-4A63-B826-716F1252061E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB} = {BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodSearch.Core", "..\Common\BloodSearch.Core\BloodSearch.Core.csproj", "{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BloodSearch.Filter", "..\Common\BloodSearch.Filter\BloodSearch.Filter.csproj", "{48D234CD-9F04-4D8B-A6CD-3513ABAE255A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +47,10 @@ Global
 		{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAF3270D-62F9-4F7F-B94E-A7CD21B4CDBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48D234CD-9F04-4D8B-A6CD-3513ABAE255A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48D234CD-9F04-4D8B-A6CD-3513ABAE255A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48D234CD-9F04-4D8B-A6CD-3513ABAE255A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48D234CD-9F04-4D8B-A6CD-3513ABAE255A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BloodSearch.Filter">
+      <HintPath>..\..\Common\BloodSearch.Filter\bin\Debug\BloodSearch.Filter.dll</HintPath>
+    </Reference>
     <Reference Include="BloodSearch.Models.Api">
       <HintPath>..\..\Common\BloodSearch.Models.Api\bin\Debug\BloodSearch.Models.Api.dll</HintPath>
     </Reference>

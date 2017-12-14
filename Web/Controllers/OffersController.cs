@@ -40,6 +40,46 @@ namespace Web.Controllers {
             return ConvertOffer(offer);
         }
 
+        [HttpPost]
+        [Route("api/offers/get-offers")]
+        public GetOffersResult GetOffers(GetOffersByFiltersParameters parameters) {
+
+            if (parameters == null) {
+                throw new ArgumentNullException("parameters");
+            }
+
+            var filter = parameters.Filter;
+            var pagingFilter = parameters.PagingFilter;
+
+            var context = new BloodSearchContext();
+
+            var query = context.Offers.Where(x => x.Type == filter.Type);
+
+            var items = query.Where(x => filter.Statuses.Any(z => z == x.State)).ToList();
+
+            var totalOffers = items.Select(x => ConvertOffer(x));
+
+            if (filter.Categories.Any()) {
+                totalOffers = totalOffers.Where(x => filter.Categories.Any(z => z == x.Offer.Category));
+            }
+
+            if (filter.Cities.Any()) {
+                totalOffers = totalOffers.Where(x => filter.Cities.Any(z => z == x.Offer.City));
+            }
+
+            var totalCount = totalOffers.Count();
+
+            var offers = totalOffers.OrderBy(x => x.Id)
+                           .Skip((pagingFilter.PageNumber - 1) * pagingFilter.PageSize)
+                           .Take(pagingFilter.PageSize)
+                           .ToList();
+
+            return new GetOffersResult {
+                Offers = offers,
+                TotalCount = totalCount
+            };
+        }
+
         private Offer SaveOffer(AddOfferModel model) {
             var context = new BloodSearchContext();
 
@@ -122,6 +162,8 @@ namespace Web.Controllers {
 
             return new GetOfferResult {
                 Id = offer.Id,
+                Type = offer.Type,
+                State = offer.State,
                 Offer = offerModel,
                 UserId = offer.UserId,
                 CreatedDate = offer.CreatedDate,
