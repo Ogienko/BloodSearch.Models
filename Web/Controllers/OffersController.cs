@@ -53,6 +53,7 @@ namespace Web.Controllers {
                     CreatedDate = DateTime.Now,
                     ChangedDate = DateTime.Now,
                     State = OfferStateEnum.Published,
+                    Type = model.Type,
                     UserId = model.UserId
                 };
             }
@@ -66,16 +67,19 @@ namespace Web.Controllers {
             if (offer.JData != jOfferModel) {
                 offer.JData = jOfferModel;
                 offer.RowProcessingStatus = RowProcessingStatusEnum.New;
+                offer.RowChangedDate = DateTime.Now;
                 offer.ChangedDate = DateTime.Now;
             }
 
             if (offer.RowProcessingStatus != RowProcessingStatusEnum.New) {
                 offer.RowProcessingStatus = RowProcessingStatusEnum.New;
+                offer.RowChangedDate = DateTime.Now;
                 offer.ChangedDate = DateTime.Now;
             }
 
             if (offer.UserId != model.UserId) {
                 offer.UserId = model.UserId;
+                offer.RowChangedDate = DateTime.Now;
                 offer.ChangedDate = DateTime.Now;
             }
 
