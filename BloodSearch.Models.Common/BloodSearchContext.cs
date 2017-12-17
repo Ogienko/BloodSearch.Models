@@ -13,6 +13,8 @@ namespace BloodSearch.Models.Common {
 
         public DbSet<Offer> Offers { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public Offer SaveOfferWithConcurencyCheck(Offer offer, RowProcessingStatusEnum? status = null) {
             if (status.HasValue) {
                 offer.RowProcessingStatus = status.Value;

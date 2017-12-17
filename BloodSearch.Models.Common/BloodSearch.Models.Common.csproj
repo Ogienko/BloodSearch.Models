@@ -71,6 +71,7 @@
     <Compile Include="BloodSearchContext.cs" />
     <Compile Include="DAL\Offer.cs" />
     <Compile Include="DAL\RowProcessingStatusEnum.cs" />
+    <Compile Include="DAL\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
