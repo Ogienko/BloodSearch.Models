@@ -122,5 +122,53 @@ namespace Web.Controllers {
             }
             return result;
         }
+
+        /// <summary>
+        /// Получаем основные параметры пользователя
+        /// </summary>
+        [Route("api/user/get-user-by-context")]
+        [HttpPost]
+        [AuthFilter]
+        public UserResult GetUserByContext(AuthRequest model) {
+            var result = new UserResult();
+            using (var db = new BloodSearchContext()) {
+                var user = db.Users.FirstOrDefault(u => u.AuthTokens.Any(t => t.Token == model.Token));
+                if (user == null) {
+                    return new UserResult() {
+                        Success = false,
+                        ErrMessages = new List<KeyMsg>() { ResponseError.GetError(TypeError.UserNotFound) }
+                    };
+                }
+                result.Id = user.Id;
+                result.Email = user.Email;
+                result.Name = user.Name;
+                result.Phone = user.Phone;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Получаем основные параметры пользователя по его id
+        /// </summary>
+        [Route("api/user/get-user-by-id")]
+        [HttpPost]
+        [AuthFilter]
+        public UserResult GetUserById(int userId) {
+            var result = new UserResult();
+            using (var db = new BloodSearchContext()) {
+                var user = db.Users.FirstOrDefault(u => u.Id == userId);
+                if (user == null) {
+                    return new UserResult() {
+                        Success = false,
+                        ErrMessages = new List<KeyMsg>() { ResponseError.GetError(TypeError.UserNotFound) }
+                    };
+                }
+                result.Id = user.Id;
+                result.Email = user.Email;
+                result.Name = user.Name;
+                result.Phone = user.Phone;
+            }
+            return result;
+        }
     }
 }
