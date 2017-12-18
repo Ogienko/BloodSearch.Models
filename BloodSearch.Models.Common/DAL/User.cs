@@ -27,7 +27,7 @@ namespace BloodSearch.Models.Common.DAL {
         /// <summary>
         /// Дата создания
         /// </summary>
-        public DateTime CreateDate { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Дата изменения

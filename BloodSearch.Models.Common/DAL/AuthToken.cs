@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BloodSearch.Models.Common.DAL {
 
     /// <summary>
     /// Авторизация токенов
     /// </summary>
+    [Table("authtokens")]
     public class AuthToken {
 
         public int Id { get; set; }

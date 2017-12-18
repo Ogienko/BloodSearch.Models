@@ -97,9 +97,10 @@ namespace Web.Controllers {
                                 PasswordHash = model.PasswordHash,
                                 Email = model.Email.ToLower(),
                                 RegisterFromIp = model.RegisterFromIp,
-                                CreateDate = DateTime.UtcNow,
-                                ChangedDate = DateTime.UtcNow
-
+                                CreatedDate = DateTime.UtcNow,
+                                ChangedDate = DateTime.UtcNow,
+                                Name = model.Name,
+                                Phone = model.Phone
                             });
 
                             db.SaveChanges();
