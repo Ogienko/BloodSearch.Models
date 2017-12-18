@@ -15,6 +15,8 @@ namespace BloodSearch.Models.Common {
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<AuthToken> AuthTokens { get; set; }
+
         public Offer SaveOfferWithConcurencyCheck(Offer offer, RowProcessingStatusEnum? status = null) {
             if (status.HasValue) {
                 offer.RowProcessingStatus = status.Value;

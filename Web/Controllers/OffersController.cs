@@ -63,8 +63,8 @@ namespace Web.Controllers {
                 totalOffers = totalOffers.Where(x => filter.Categories.Any(z => z == x.Offer.Category));
             }
 
-            if (filter.Cities.Any()) {
-                totalOffers = totalOffers.Where(x => filter.Cities.Any(z => z == x.Offer.City));
+            if (filter.Region != 1) {
+                totalOffers = totalOffers.Where(x => filter.Region == x.Offer.GeoAddress.Id);
             }
 
             var totalCount = totalOffers.Count();
