@@ -35,9 +35,17 @@ namespace Web.Controllers {
         [Route("api/offers/get")]
         public GetOfferResult Get(long id) {
             var context = new BloodSearchContext();
-
             var offer = context.Offers.AsNoTracking().Single(x => x.Id == id);
             return ConvertOffer(offer);
+        }
+
+        [HttpGet]
+        [Route("api/offers/get-by-user")]
+        public List<GetOfferResult> GetByUser(int userId) {
+            var context = new BloodSearchContext();
+            var offers = context.Offers.Where(x => x.UserId.HasValue && x.UserId.Value == userId).ToList();
+            var result = offers.Select(ConvertOffer).ToList();
+            return result;
         }
 
         [HttpPost]
@@ -57,7 +65,7 @@ namespace Web.Controllers {
 
             var items = query.Where(x => filter.Statuses.Any(z => z == x.State)).ToList();
 
-            var totalOffers = items.Select(x => ConvertOffer(x));
+            var totalOffers = items.Select(ConvertOffer);
 
             if (filter.Categories.Any()) {
                 totalOffers = totalOffers.Where(x => filter.Categories.Any(z => z == x.Offer.Category));

@@ -171,5 +171,26 @@ namespace Web.Controllers {
             }
             return result;
         }
+
+        [Route("api/user/edit-user")]
+        [HttpPost]
+        [AuthFilter]
+        public BaseResponse EditUser(EditUserRequest model) {
+            using (var db = new BloodSearchContext()) {
+                var user = db.Users.FirstOrDefault(_ => _.Id == model.UserId);
+                if (user == null) {
+                    return new UserResult() {
+                        Success = false,
+                        ErrMessages = new List<KeyMsg>() { ResponseError.GetError(TypeError.UserNotFound) }
+                    };
+                }
+                user.Name = model.Name?.Trim();
+                user.Phone = model.Phone?.Trim();
+                db.SaveChanges();
+                return new BaseResponse() {
+                    Success = true
+                };
+            }
+        }
     }
 }
