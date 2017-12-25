@@ -31,6 +31,18 @@ namespace Web.Controllers {
             return ret;
         }
 
+        [HttpPost]
+        [Route("api/offers/delete-offer")]
+        public DeleteOfferResult DeleteOffer(DeleteOfferModel model) {
+            return Retry.Do(() => this.DeleteOfferInternal(model));
+        }
+
+        [HttpPost]
+        [Route("api/offers/publish-offer")]
+        public PublishOfferResult Publishffer(PublishOfferModel model) {
+            return Retry.Do(() => this.PublishOfferInternal(model));
+        }
+
         [HttpGet]
         [Route("api/offers/get")]
         public GetOfferResult Get(long id) {
@@ -61,18 +73,24 @@ namespace Web.Controllers {
 
             var context = new BloodSearchContext();
 
-            var query = context.Offers.Where(x => x.Type == filter.Type);
+            var query = filter.Type == OfferTypeEnum.Any ?
+                context.Offers :
+                context.Offers.Where(x => x.Type == filter.Type);
 
             var items = query.Where(x => filter.Statuses.Any(z => z == x.State)).ToList();
 
             var totalOffers = items.Select(ConvertOffer);
 
             if (filter.Categories.Any()) {
-                totalOffers = totalOffers.Where(x => filter.Categories.Any(z => z == x.Offer.Category));
+                totalOffers = totalOffers.Where(x => filter.Categories.FirstOrDefault() == x.Offer.Category);
             }
 
-            if (filter.Region != 1) {
-                totalOffers = totalOffers.Where(x => filter.Region == x.Offer.GeoAddress.Id);
+            if (filter.RegionId.HasValue) {
+                totalOffers = totalOffers.Where(x => filter.RegionId.Value == x.Offer.GeoAddress.Id);
+            }
+
+            if (filter.Statuses.Any()) {
+                totalOffers = totalOffers.Where(x => filter.Statuses.Any(z => z == x.State));
             }
 
             var totalCount = totalOffers.Count();
@@ -100,7 +118,7 @@ namespace Web.Controllers {
                 offer = new Offer {
                     CreatedDate = DateTime.Now,
                     ChangedDate = DateTime.Now,
-                    State = OfferStateEnum.Published,
+                    State = OfferStateEnum.New,
                     Type = model.Type,
                     UserId = model.UserId
                 };
@@ -158,6 +176,74 @@ namespace Web.Controllers {
             }
 
             return ret;
+        }
+
+        private DeleteOfferResult DeleteOfferInternal(DeleteOfferModel model) {
+            var result = new DeleteOfferResult();
+
+            var context = new BloodSearchContext();
+            var offer = context.Offers.Single(x => x.Id == model.OfferId);
+
+            result.ErrMessages = ValidateDeleteOfferModel(model, offer);
+
+            if (result.ErrMessages.Any()) {
+                result.Success = false;
+                return result;
+            }
+
+            offer.State = OfferStateEnum.Deleted;
+            offer.RowChangedDate = DateTime.Now;
+            offer.RowProcessingStatus = RowProcessingStatusEnum.Processed;
+
+            context.SaveChanges();
+            context.Entry(offer).State = System.Data.Entity.EntityState.Detached;
+
+            result.Success = true;
+            return result;
+        }
+
+        private PublishOfferResult PublishOfferInternal(PublishOfferModel model) {
+            var result = new PublishOfferResult();
+
+            var context = new BloodSearchContext();
+            var offer = context.Offers.Single(x => x.Id == model.OfferId);
+
+            result.ErrMessages = ValidatePublishOfferModel(model, offer);
+
+            if (result.ErrMessages.Any()) {
+                result.Success = false;
+                return result;
+            }
+
+            offer.State = OfferStateEnum.Published;
+            offer.RowChangedDate = DateTime.Now;
+            offer.RowProcessingStatus = RowProcessingStatusEnum.Processed;
+
+            context.SaveChanges();
+            context.Entry(offer).State = System.Data.Entity.EntityState.Detached;
+
+            result.Success = true;
+            return result;
+        }
+
+        private static List<KeyValuePair<string, string>> ValidateDeleteOfferModel(DeleteOfferModel model, Offer offer) {
+            var result = new List<KeyValuePair<string, string>>();
+
+            if (!model.IsAdmin && model.UserId != offer.UserId) {
+                result.Add(new KeyValuePair<string, string>("wrong user", "указанный пользователь не совпадает"));
+            }
+
+            return result;
+        }
+
+        private static List<KeyValuePair<string, string>> ValidatePublishOfferModel(PublishOfferModel model, Offer offer) {
+            var result = new List<KeyValuePair<string, string>>();
+
+            if (!model.IsAdmin && model.UserId != offer.UserId) {
+                result.Add(new KeyValuePair<string, string>("wrong user", "указанный пользователь не совпадает"));
+            }
+
+            return result;
         }
 
         private GetOfferResult ConvertOffer(Offer offer) {
